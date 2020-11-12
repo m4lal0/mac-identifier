@@ -62,16 +62,27 @@ function ctrl_c(){
     tput cnorm; exit 0
 }
 
+function banner(){
+    banner="\t ____    ____      __        ______      _____ ________   \n"
+    banner+="\t|_   \  /   _|    /  \     ./ ___  |    |_   _|_   ___ \. \n"
+    banner+="\t  |   \/   |     / /\ \   / ./   \_|      | |   | |   \. \\ \n"
+    banner+="\t  | |\  /| |    / ____ \  | |             | |   | |    | |\n"
+    banner+="\t _| |_\/_| |_ _/ /    \ \_\ \.___.'\     _| |_ _| |___.' /\n"
+    banner+="\t|_____||_____|____|  |____|\._____.'    |_____|________.'"
+    echo -e "${BGray}$banner${Color_Off}"
+    echo -e "\t\t\t\t\t\t\t${BGray}By ${BBlue}@m4lal0${Color_Off}\n"
+}
+
 function helpPanel(){
     echo -e "${BGray}Script para identificar el fabricante de una dirección MAC.${Color_Off}"
-    echo -e "\n${BGray}USO: \n\t ${BGreen}./mac-identifier ${LBlue}[${BRed}opción${LBlue}]${Color_Off}"
+    echo -e "\n${BGray}USO: \n\t ${BGreen}./mac-identifier ${LBlue}[${BRed}opción ${LGray}<argumento>${LBlue}]${Color_Off}"
     echo -e "\n${BGray}OPCIONES:${Color_Off}"
-    echo -e "\t${LBlue}[${BRed}-m , --mac${LBlue}] \t\t${BPurple}Dirección MAC.${Color_Off}"
-    echo -e "\t${LBlue}[${BRed}-f , --file${LBlue}] \t\t${BPurple}Leer un archivo con un listado de MAC.${Color_Off}"
-    echo -e "\t${LBlue}[${BRed}-o , --output${LBlue}] \t${BPurple}Guardar el resultado en un archivo.${Color_Off}"
-    echo -e "\t${LBlue}[${BRed}-h , --help${LBlue}] \t\t${BPurple}Mostrar este panel de ayuda.${Color_Off}"
+    echo -e "\t${LBlue}[${BRed}-m ${LGray}<MAC> ${BRed}, --mac ${LGray}<MAC>${LBlue}] \t${BPurple}Dirección MAC.${Color_Off}"
+    echo -e "\t${LBlue}[${BRed}-f ${LGray}<FILE> ${BRed}, --file ${LGray}<FILE>${LBlue}] \t${BPurple}Leer un archivo con un listado de direcciones MAC.${Color_Off}"
+    echo -e "\t${LBlue}[${BRed}-o ${LGray}<FILE> ${BRed}, --output ${LGray}<FILE>${LBlue}] \t${BPurple}Guardar el resultado en un archivo.${Color_Off}"
+    echo -e "\t${LBlue}[${BRed}-h , --help${LBlue}] \t\t\t${BPurple}Mostrar este panel de ayuda.${Color_Off}"
     echo -e "\n${BGray}EJEMPLOS:${Color_Off}"
-    echo -e "\t${BGreen}./mac-identifier -m 00:17:09:b9:a8:29 ${BGray}- Identificar el fabricante de la dirección MAC.${Color_Off}"
+    echo -e "\t${BGreen}./mac-identifier -m 00:17:09:da:1b:6a ${BGray}- Identificar el fabricante de la dirección MAC.${Color_Off}"
     echo -e "\t${BGreen}./mac-identifier -f archivo.txt -o output.txt ${BGray}- Leer un archivo con direcciones MAC y guardar el resultado en un archivo.${Color_Off}\n"
 }
 
@@ -99,7 +110,7 @@ function macIndentifier(){
         echo -e "\t${BGray}VENDOR: ${BGreen}$result${Color_Off}\n"
         echo -e "${BYellow}===========================================================${Color_Off}\n"
     else
-        echo -e "\n\t${LBlue}[${BRed}✘${LBlue}] ${BRed}Información no encontrada en la BD.${Color_Off}\n"
+        echo -e "\n\t${LBlue}[${BRed}✘${LBlue}] ${BRed}Información no encontrada.${Color_Off}\n"
         exit 1
     fi
 }
@@ -111,7 +122,7 @@ function macOutput(){
         echo -e "\n${LBlue}[${BGreen}✔${LBlue}] ${BGreen}Guardado el resultado en el archivo ${BGray}$output${Color_Off}\n"
     else
         echo "MAC: $mac_address" > $output
-        echo "VENDOR: Información no encontrada en la BD" >> $output
+        echo "VENDOR: Información no encontrada." >> $output
     fi
 }
 
@@ -127,7 +138,7 @@ function macFile(){
             echo -e "\t${BGray}VENDOR: ${BGreen}$result${Color_Off}\n"
         else
             echo -e "\t${BGray}MAC: \t${BRed}$line${Color_Off}"
-            echo -e "\t${BGray}VENDOR: ${BRed}Información no encontrada en la BD.${Color_Off}\n"
+            echo -e "\t${BGray}VENDOR: ${BRed}Información no encontrada.${Color_Off}\n"
         fi
     done <<< $(cat $file)
 }
@@ -143,7 +154,7 @@ function macOutputFile(){
             echo "" >> $output
         else
             echo "MAC: $line" >> $output
-            echo "VENDOR: Información no encontrada en la BD" >> $output
+            echo "VENDOR: Información no encontrada." >> $output
             echo "" >> $output
         fi
     done <<< $(cat $file)
@@ -204,7 +215,9 @@ declare -i parameter_counter=0; while getopts ":m:o:f:h:" opt; do
 done
 
 if [ $parameter_counter -eq 0 ]; then
+    banner
     helpPanel
 else
+    banner
     identifier
 fi
