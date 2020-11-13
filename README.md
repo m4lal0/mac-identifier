@@ -19,7 +19,7 @@ Tras ejecutar la herramienta, nos mostrará el panel de ayuda.
 	style="float: left; margin-right: 10px;" />
 </p>
 
-La herramienta cuenta con 3 parametros:
+La herramienta cuenta con 3 parámetros:
 
 * -m ó --mac : Lee una dirección MAC.
     + Usamos el parametro **-m** ó **--mac** seguido como argumento la dirección MAC.
@@ -29,6 +29,9 @@ La herramienta cuenta con 3 parametros:
 
 * -o ó --output : Guarda el resultado en un archivo.
     + Usamos el parametro **-o** ó **--output** seguido como argumento el nombre que queremos llamar a nuestro archivo.
+
+* -u ó --update : Actualiza el archivo OUI.
+    + Usamos el parametro **-u** ó **--update** para actualizar la herramienta.
 
 
 > Al ejecutar por primera vez el script, descargará un archivo (OUI) que contiene listado de fabricantes para el correcto uso de la herramienta.
