@@ -63,14 +63,16 @@ function ctrl_c(){
 }
 
 function banner(){
-    banner="\t ____    ____      __        ______      _____ ________   \n"
-    banner+="\t|_   \  /   _|    /  \     ./ ___  |    |_   _|_   ___ \. \n"
-    banner+="\t  |   \/   |     / /\ \   / ./   \_|      | |   | |   \. \\ \n"
-    banner+="\t  | |\  /| |    / ____ \  | |             | |   | |    | |\n"
-    banner+="\t _| |_\/_| |_ _/ /    \ \_\ \.___.'\     _| |_ _| |___.' /\n"
-    banner+="\t|_____||_____|____|  |____|\._____.'    |_____|________.'"
-    echo -e "${BGray}$banner${Color_Off}"
-    echo -e "\t\t\t\t\t\t\t${BGray}By ${BBlue}@m4lal0${Color_Off}\n"
+    echo -e "\n\t${BGray}#################################################################"
+    echo -e "\t#    _   _                                ______    ____        #"
+    echo -e "\t#   / \_/ \                              /\__  _\  /\  __\`\     #"
+    echo -e "\t#  /\      \       __        ___         \/_/\ \/  \ \ \/\ \    #"
+    echo -e "\t#  \ \ \__\ \    / __ \     / ___\          \ \ \   \ \ \ \ \   #"
+    echo -e "\t#   \ \ \_/\ \  /\ \L\.\_  /\ \__/           \_\ \__ \ \ \_\ \\  #"
+    echo -e "\t#    \ \_\ \ _\ \ \__/.\_\ \ \____\          /\_____\ \ \____/  #"
+    echo -e "\t#     \/_/ \/_/  \/__/\/_/  \/____/          \/_____/  \/___/   #"
+    echo -e "\t#\t\t\t\t\t\t${BGray}    By ${BBlue}@m4lal0 ${BGray} #"
+    echo -e "\t#################################################################${Color_Off}\n"
 }
 
 function helpPanel(){
@@ -80,10 +82,29 @@ function helpPanel(){
     echo -e "\t${LBlue}[${BRed}-m ${LGray}<MAC> ${BRed}, --mac ${LGray}<MAC>${LBlue}] \t${BPurple}Dirección MAC.${Color_Off}"
     echo -e "\t${LBlue}[${BRed}-f ${LGray}<FILE> ${BRed}, --file ${LGray}<FILE>${LBlue}] \t${BPurple}Leer un archivo con un listado de direcciones MAC.${Color_Off}"
     echo -e "\t${LBlue}[${BRed}-o ${LGray}<FILE> ${BRed}, --output ${LGray}<FILE>${LBlue}] \t${BPurple}Guardar el resultado en un archivo.${Color_Off}"
+    echo -e "\t${LBlue}[${BRed}-u , --update${LBlue}] \t\t${BPurple}Actualizar archivo OUI.${ColorOff}"
     echo -e "\t${LBlue}[${BRed}-h , --help${LBlue}] \t\t\t${BPurple}Mostrar este panel de ayuda.${Color_Off}"
     echo -e "\n${BGray}EJEMPLOS:${Color_Off}"
     echo -e "\t${BGreen}./mac-identifier -m 00:17:09:da:1b:6a ${BGray}- Identificar el fabricante de la dirección MAC.${Color_Off}"
     echo -e "\t${BGreen}./mac-identifier -f archivo.txt -o output.txt ${BGray}- Leer un archivo con direcciones MAC y guardar el resultado en un archivo.${Color_Off}\n"
+}
+
+function update(){
+    test -f oui.txt 2>/dev/null
+    if [ "$(echo $?)" == "0" ]; then
+        echo -e "\n${LBlue}[${BYellow}!${LBlue}] ${BYellow}Actualizando..."
+        rm oui.txt && wget http://standards-oui.ieee.org/oui/oui.txt > /dev/null 2>&1
+        if [ "$(echo $?)" == "0" ]; then
+            echo -e "${LBlue}[${BGreen}✔${LBlue}] ${LGreen}OUI Actualizado.${Color_Off}\n"
+            exit 0
+        else
+            echo -e "${LBlue}[${BRed}✘${LBlue}] ${BRed}Error al descargar el archivo automáticamente, descargalo manualmente desde: ${LBlue}http://standards-oui.ieee.org/oui/oui.txt${Color_Off}\n"
+            exit 1
+        fi
+    else
+        dependencie
+        exit 0
+    fi
 }
 
 function dependencie(){
@@ -92,9 +113,9 @@ function dependencie(){
         echo -e "\n${LBlue}[${BYellow}!${LBlue}] ${BGray}Archivo oui.txt no encontrado, descargando..."
         wget http://standards-oui.ieee.org/oui/oui.txt > /dev/null 2>&1
         if [ "$(echo $?)" == "0" ]; then
-            echo -e "${LBlue}[${BGreen}✔${LBlue}] ${LGreen}Se ha descargado el archivo correctamente.${Color_Off}"
+            echo -e "${LBlue}[${BGreen}✔${LBlue}] ${LGreen}Se ha descargado el archivo correctamente.${Color_Off}\n"
         else
-            echo -e "${LBlue}[${BRed}✘${LBlue}] ${BRed}Error al descargar el archivo automaticamente, descargalo manualmente desde: ${LBlue}http://standards-oui.ieee.org/oui/oui.txt${Color_Off}\n"
+            echo -e "${LBlue}[${BRed}✘${LBlue}] ${BRed}Error al descargar el archivo automáticamente, descargalo manualmente desde: ${LBlue}http://standards-oui.ieee.org/oui/oui.txt${Color_Off}\n"
             exit 1
         fi
     fi
@@ -105,10 +126,10 @@ function macIndentifier(){
     result=$(grep -i -A 1 ^$MAC ./oui.txt | cut -f 3)
     if [ "$result" ]; then
         echo -e "\n${BYellow}RESULTADO:${Color_Off}"
-        echo -e "${BYellow}===========================================================${Color_Off}"
+        echo -e "${BYellow}------------------------------------------------------------${Color_Off}"
         echo -e "\n\t${BGray}MAC: \t${BGreen}$mac_address${Color_Off}"
         echo -e "\t${BGray}VENDOR: ${BGreen}$result${Color_Off}\n"
-        echo -e "${BYellow}===========================================================${Color_Off}\n"
+        echo -e "${BYellow}------------------------------------------------------------${Color_Off}\n"
     else
         echo -e "\n\t${LBlue}[${BRed}✘${LBlue}] ${BRed}Información no encontrada.${Color_Off}\n"
         exit 1
@@ -128,7 +149,7 @@ function macOutput(){
 
 function macFile(){
     echo -e "\n${BYellow}RESULTADO:${Color_Off}"
-    echo -e "${BYellow}===========================================================${Color_Off}\n"
+    echo -e "${BYellow}------------------------------------------------------------${Color_Off}\n"
     while IFS= read -r line
     do
         MAC=$(echo "$line" | sed 's/ //g' | sed 's/-//g' | sed 's/://g' | cut -c1-6)
@@ -196,6 +217,7 @@ for arg; do
 		--help)		args="${args}-h";;
 		--mac)	    args="${args}-m";;
         --file)	    args="${args}-f";;
+        --update)	args="${args}-u";;
         --output)	args="${args}-o";;
         --*)        args="${args}*";;
 		*) [[ "${arg:0:1}" == "-" ]] || delim="\""
@@ -205,11 +227,12 @@ done
 
 eval set -- $args
 
-declare -i parameter_counter=0; while getopts ":m:o:f:h:" opt; do
+declare -i parameter_counter=0; while getopts ":m:o:f:uh:" opt; do
     case $opt in
         m) mac_address=$OPTARG && let parameter_counter+=1 ;;
         o) output=$OPTARG && let parameter_counter+=1 ;;
         f) file=$OPTARG && let parameter_counter+=1 ;;
+        u) update ;;
         h) helpPanel ;;
     esac
 done
