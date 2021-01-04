@@ -123,6 +123,7 @@ function dependencie(){
 }
 
 function macIndentifier(){
+    macValidate
     MAC=$(echo "$mac_address" | sed 's/ //g' | sed 's/-//g' | sed 's/://g' | cut -c1-6)
     result=$(grep -i -A 1 ^$MAC ./oui.txt | cut -f 3)
     if [ "$result" ]; then
@@ -180,6 +181,15 @@ function macOutputFile(){
             echo "" >> $output
         fi
     done <<< $(cat $file)
+}
+
+function macValidate(){
+    mac_address=${mac_address^^}
+    if [ ! `echo $mac_address | egrep "^([0-9A-F]{2}:){5}[0-9A-F]{2}$"` ]
+    then
+        echo -e "\n\t${LBlue}[${BRed}✘${LBlue}] ${BRed}Dirección MAC Inválida.${Color_Off}\n"
+        exit 0
+    fi
 }
 
 function identifier(){
