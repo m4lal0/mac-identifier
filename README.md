@@ -3,7 +3,6 @@
 [![GitHub top language](https://img.shields.io/github/languages/top/m4lal0/mac-identifier?logo=gnu-bash&style=for-the-badge)](#)
 [![GitHub repo size](https://img.shields.io/github/repo-size/m4lal0/mac-identifier?logo=webpack&style=for-the-badge)](#)
 [![Debian Supported](https://img.shields.io/badge/Debian-Supported-blue?style=for-the-badge&logo=debian)](#)
-[![Kali Supported](https://img.shields.io/badge/Kali-Supported-blue?style=for-the-badge&logo=kali-linux)](#)
 [![By](https://img.shields.io/badge/By-m4lal0-green?style=for-the-badge&logo=github)](#)
 
 ![Help-Panel](./images/helpPanel.png)
